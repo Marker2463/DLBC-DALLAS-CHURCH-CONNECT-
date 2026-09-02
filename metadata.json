@@ -1,0 +1,7 @@
+{
+  "name": "DLBC Church Connect",
+  "description": "A highly secure, confidential pastoral consultation platform for Deeper Life Bible Church.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

@@ -1,0 +1,69 @@
+{
+  "collections": [
+    {
+      "name": "users",
+      "fields": [
+        { "name": "uid", "type": "string", "description": "User ID" },
+        { "name": "displayName", "type": "string", "description": "Display name" },
+        { "name": "email", "type": "string", "description": "Email address" },
+        { "name": "role", "type": "string", "description": "User role: 'member', 'leader', 'pastor'" },
+        { "name": "leaderType", "type": "string", "description": "Type of leader" }
+      ],
+      "rules": [
+        { "allow": "read", "condition": "request.auth != null" },
+        { "allow": "write", "condition": "request.auth != null && request.auth.uid == document" }
+      ]
+    },
+    {
+      "name": "consultations",
+      "fields": [
+        { "name": "id", "type": "string" },
+        { "name": "memberId", "type": "string" },
+        { "name": "memberName", "type": "string" },
+        { "name": "leaderId", "type": "string" },
+        { "name": "leaderName", "type": "string" },
+        { "name": "category", "type": "string" },
+        { "name": "urgency", "type": "string" },
+        { "name": "reason", "type": "string" },
+        { "name": "attachments", "type": "array" },
+        { "name": "selectedTime", "type": "timestamp" },
+        { "name": "status", "type": "string" },
+        { "name": "isLocked", "type": "boolean" },
+        { "name": "googleMeetUrl", "type": "string" },
+        { "name": "googleEventId", "type": "string" },
+        { "name": "journeyTimeline", "type": "array" }
+      ],
+      "rules": [
+        { "allow": "read", "condition": "request.auth != null && (resource.data.memberId == request.auth.uid || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['leader', 'pastor'])" },
+        { "allow": "create", "condition": "request.auth != null && request.resource.data.memberId == request.auth.uid" },
+        { "allow": "update", "condition": "request.auth != null && (resource.data.memberId == request.auth.uid || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['leader', 'pastor'])" }
+      ]
+    },
+    {
+      "name": "consultation_notes",
+      "fields": [
+        { "name": "consultationId", "type": "string" },
+        { "name": "authorId", "type": "string" },
+        { "name": "authorRole", "type": "string" },
+        { "name": "content", "type": "string" },
+        { "name": "createdAt", "type": "timestamp" }
+      ],
+      "rules": [
+        { "allow": "read", "condition": "request.auth != null" },
+        { "allow": "create", "condition": "request.auth != null" }
+      ]
+    },
+    {
+      "name": "availability",
+      "fields": [
+        { "name": "leaderId", "type": "string" },
+        { "name": "weeklySchedule", "type": "map" },
+        { "name": "blackoutDates", "type": "array" }
+      ],
+      "rules": [
+        { "allow": "read", "condition": "request.auth != null" },
+        { "allow": "write", "condition": "request.auth != null && request.auth.uid == document" }
+      ]
+    }
+  ]
+}

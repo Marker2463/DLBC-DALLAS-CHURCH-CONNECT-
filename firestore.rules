@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // User Profiles
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    
+    // Consultations & Meeting Requests
+    match /consultations/{consultationId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    
+    // Pastoral Consultation Notes
+    match /consultation_notes/{noteId} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if request.auth != null;
+    }
+    
+    // Leader & Pastor Availability
+    match /availability/{leaderId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    
+    // Audit Logs
+    match /audit_logs/{logId} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+    }
+  }
+}
+
